@@ -120,7 +120,7 @@ export const postJob = async (req, res) => {
             date: Date.now(),
             level,
             category,
-            jobLink // 👈 added field
+           // jobLink // 👈 added field
         })
 
         await newJob.save()
