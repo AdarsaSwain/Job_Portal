@@ -105,7 +105,7 @@ export const getCompanyData = async (req, res) => {
 // Post New Job
 export const postJob = async (req, res) => {
 
-    const { title, description, location, salary, level, category } = req.body
+    const { title, description, location, salary, level, category,jobLink } = req.body
 
     const companyId = req.company._id
 
