@@ -6,28 +6,24 @@ import { toast } from 'react-toastify'
 
 const JobCard = ({ job }) => {
   const navigate = useNavigate()
-  const { backendUrl, userToken, currentUser } = useContext(AppContext)
+  const { backendUrl, userToken } = useContext(AppContext)
 
   const handleApply = async () => {
     try {
-      // ✅ old flow: save application to backend
+      // ✅ Use the correct apply endpoint that works in your backend
       await axios.post(
-        backendUrl + '/api/applications/apply',
-        {
-          jobId: job._id,
-          userId: currentUser?._id // adjust if backend takes user from token
-        },
+        backendUrl + '/api/users/apply',
+        { jobId: job._id },
         { headers: { token: userToken } }
       )
 
       toast.success('Application submitted!')
 
-      // ✅ new flow: redirect to external jobLink if recruiter added one
+      // ✅ redirect to external jobLink if recruiter added one
       if (job.jobLink && job.jobLink.trim() !== '') {
-        // make sure link starts with http/https
         const validLink = job.jobLink.startsWith('http')
           ? job.jobLink
-          : `https://${job.jobLink}`;
+          : `https://${job.jobLink}`
         window.open(validLink, '_blank') // open in new tab
       } else {
         // fallback: go to internal apply page
@@ -65,7 +61,7 @@ const JobCard = ({ job }) => {
       ></p>
 
       <div className="mt-4 flex gap-4 text-sm">
-        {/* ✅ Apply now uses our new handler */}
+        {/* ✅ Apply now uses our fixed handler */}
         <button
           onClick={handleApply}
           className="bg-blue-600 text-white px-4 py-2 rounded"
