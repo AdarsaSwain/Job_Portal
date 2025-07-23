@@ -4,8 +4,7 @@ import { assets, JobCategories, JobLocations } from "../assets/assets";
 import JobCard from "./JobCard";
 
 const JobListing = () => {
-  const { isSearched, searchFilter, setSearchFilter, jobs } =
-    useContext(AppContext);
+  const { isSearched, searchFilter, setSearchFilter, jobs } = useContext(AppContext);
 
   const [showFilter, setShowFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,28 +17,22 @@ const JobListing = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
     );
   };
 
   const handleLocationChange = (location) => {
     setSelectedLocations((prev) =>
-      prev.includes(location)
-        ? prev.filter((c) => c !== location)
-        : [...prev, location]
+      prev.includes(location) ? prev.filter((c) => c !== location) : [...prev, location]
     );
   };
 
   useEffect(() => {
     const matchesCategory = (job) =>
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(job.category);
+      selectedCategories.length === 0 || selectedCategories.includes(job.category);
 
     const matchesLocation = (job) =>
-      selectedLocations.length === 0 ||
-      selectedLocations.includes(job.location);
+      selectedLocations.length === 0 || selectedLocations.includes(job.location);
 
     const matchesTitle = (job) =>
       searchFilter.title === "" ||
@@ -49,6 +42,11 @@ const JobListing = () => {
       searchFilter.location === "" ||
       job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
 
+    const matchesExperience = (job) =>
+      searchFilter.experience === "" || !searchFilter.experience
+        ? true
+        : job.experience === searchFilter.experience;
+
     const newFilteredJobs = jobs
       .slice()
       .reverse()
@@ -57,7 +55,8 @@ const JobListing = () => {
           matchesCategory(job) &&
           matchesLocation(job) &&
           matchesTitle(job) &&
-          matchesSearchLocation(job)
+          matchesSearchLocation(job) &&
+          matchesExperience(job)
       );
 
     setFilteredJobs(newFilteredJobs);
@@ -68,35 +67,51 @@ const JobListing = () => {
     <div className="container 2xl:px-20 mx-auto flex flex-col lg:flex-row max-lg:space-y-8 py-8">
       {/* Sidebar */}
       <div className="w-full lg:w-1/4 bg-white px-4">
-        {/*  Search Filter from Hero Component */}
+        {/* Current Search */}
         {isSearched &&
-          (searchFilter.title !== "" || searchFilter.location !== "") && (
+          (searchFilter.title !== "" ||
+            searchFilter.location !== "" ||
+            searchFilter.experience !== "") && (
             <>
               <h3 className="font-medium text-lg mb-4">Current Search</h3>
-              <div className="mb-4 text-gray-600">
+              <div className="mb-4 text-gray-600 space-x-2">
                 {searchFilter.title && (
                   <span className="inline-flex items-center gap-2.5 bg-blue-50 border border-blue-200 px-4 py-1.5 rounded">
                     {searchFilter.title}
                     <img
-                      onClick={(e) =>
+                      onClick={() =>
                         setSearchFilter((prev) => ({ ...prev, title: "" }))
                       }
                       className="cursor-pointer"
                       src={assets.cross_icon}
-                      alt=""
+                      alt="Clear"
                     />
                   </span>
                 )}
                 {searchFilter.location && (
-                  <span className="ml-2 inline-flex items-center gap-2.5 bg-red-50 border border-red-200 px-4 py-1.5 rounded">
+                  <span className="inline-flex items-center gap-2.5 bg-red-50 border border-red-200 px-4 py-1.5 rounded">
                     {searchFilter.location}
                     <img
-                      onClick={(e) =>
+                      onClick={() =>
                         setSearchFilter((prev) => ({ ...prev, location: "" }))
                       }
                       className="cursor-pointer"
                       src={assets.cross_icon}
-                      alt=""
+                      alt="Clear"
+                    />
+                  </span>
+                )}
+                {/* ✅ Experience badge */}
+                {searchFilter.experience && (
+                  <span className="inline-flex items-center gap-2.5 bg-green-50 border border-green-200 px-4 py-1.5 rounded">
+                    {searchFilter.experience}
+                    <img
+                      onClick={() =>
+                        setSearchFilter((prev) => ({ ...prev, experience: "" }))
+                      }
+                      className="cursor-pointer"
+                      src={assets.cross_icon}
+                      alt="Clear"
                     />
                   </span>
                 )}
@@ -105,7 +120,7 @@ const JobListing = () => {
           )}
 
         <button
-          onClick={(e) => setShowFilter((prev) => !prev)}
+          onClick={() => setShowFilter((prev) => !prev)}
           className="px-6 py-1.5 rounded border border-gray-400 lg:hidden"
         >
           {showFilter ? "Close" : "Filters"}
@@ -196,42 +211,6 @@ const JobListing = () => {
             )}
           </div>
         </div>
-
-        {/* Category Filter */}
-        {/* <div className={showFilter ? "" : "max-lg:hidden"}>
-          <h4 className="font-medium text-lg py-4">Search by Categories</h4>
-          <ul className="space-y-4 text-gray-600">
-            {JobCategories.map((category, index) => (
-              <li className="flex gap-3 items-center" key={index}>
-                <input
-                  className="scale-125"
-                  type="checkbox"
-                  onChange={() => handleCategoryChange(category)}
-                  checked={selectedCategories.includes(category)}
-                />
-                {category}
-              </li>
-            ))}
-          </ul>
-        </div> */}
-
-        {/* Location Filter */}
-        {/* <div className={showFilter ? "" : "max-lg:hidden"}>
-          <h4 className="font-medium text-lg py-4 pt-14">Search by Location</h4>
-          <ul className="space-y-4 text-gray-600">
-            {JobLocations.map((location, index) => (
-              <li className="flex gap-3 items-center" key={index}>
-                <input
-                  className="scale-125"
-                  type="checkbox"
-                  onChange={() => handleLocationChange(location)}
-                  checked={selectedLocations.includes(location)}
-                />
-                {location}
-              </li>
-            ))}
-          </ul>
-        </div> */}
       </div>
 
       {/* Job listings */}
@@ -248,12 +227,11 @@ const JobListing = () => {
             ))}
         </div>
 
-        {/* Pagination */}
         {filteredJobs.length > 0 && (
           <div className="flex items-center justify-center space-x-2 mt-10">
             <a href="#job-list">
               <img
-                onClick={() => setCurrentPage(Math.max(currentPage - 1), 1)}
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
                 src={assets.left_arrow_icon}
                 alt=""
               />
@@ -278,10 +256,7 @@ const JobListing = () => {
               <img
                 onClick={() =>
                   setCurrentPage(
-                    Math.min(
-                      currentPage + 1,
-                      Math.ceil(filteredJobs.length / 6)
-                    )
+                    Math.min(currentPage + 1, Math.ceil(filteredJobs.length / 6))
                   )
                 }
                 src={assets.right_arrow_icon}
