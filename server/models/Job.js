@@ -9,7 +9,8 @@ const jobSchema = new mongoose.Schema({
     salary: { type: Number, required: true },
     date: { type: Number, required: true },
     visible: { type: Boolean, default: true },
-    jobLink: { type: String },  // recruiter-provided link
+    jobLink: { type: String },  // recruiter-provided link,
+    experience: String, //exp 
     companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
 
 })

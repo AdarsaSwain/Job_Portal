@@ -105,7 +105,7 @@ export const getCompanyData = async (req, res) => {
 // Post New Job
 export const postJob = async (req, res) => {
 
-    const { title, description, location, salary, level, category,jobLink } = req.body
+    const { title, description, location, salary, level, category,jobLink,experience } = req.body
 
     const companyId = req.company._id
 
@@ -120,7 +120,8 @@ export const postJob = async (req, res) => {
             date: Date.now(),
             level,
             category,
-           jobLink // 👈 added field
+           jobLink ,// 👈 added field
+           experience
         })
 
         await newJob.save()

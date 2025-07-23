@@ -82,6 +82,7 @@ export const JobCategories = [
   "Management",
   "Marketing",
   "Cybersecurity",
+  "cloud technology"
 ];
 
 export const JobLocations = [

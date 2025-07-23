@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.17.1",
-    "@react-three/fiber": "^8.15.16",
+    "@react-three/fiber": "^8.18.0",
     "axios": "^1.7.9",
     "k-convert": "^1.0.6",
     "moment": "^2.30.1",
